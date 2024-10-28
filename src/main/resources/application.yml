@@ -1,0 +1,11 @@
+quarkus:
+  datasource:
+    devservices:
+      enabled: true
+      port: 5432
+      image-name: quay.io/debezium/postgres:14-alpine
+    db-kind: postgresql
+  cache:
+    enabled: true
+    caffeine:
+      expire-after-write: 2m
