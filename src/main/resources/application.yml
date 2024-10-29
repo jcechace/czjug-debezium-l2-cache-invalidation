@@ -9,3 +9,8 @@ quarkus:
     enabled: true
     caffeine:
       expire-after-write: 2m
+debezium:
+  name: cache-invalidation-engine
+  prefix: listener
+  tables:
+    - public.item
