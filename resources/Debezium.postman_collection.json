@@ -1,0 +1,178 @@
+{
+	"info": {
+		"_postman_id": "3b76b405-c065-414c-93e6-de9f5b065766",
+		"name": "Debezium",
+		"description": "Debezium Demo requests",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "37496"
+	},
+	"item": [
+		{
+			"name": "L2_cache",
+			"item": [
+				{
+					"name": "external",
+					"item": [
+						{
+							"name": "ex_get_item_10001",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "localhost:8080/rest/external/items/10001",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"rest",
+										"external",
+										"items",
+										"10001"
+									]
+								},
+								"description": "Get Item info via JDBC"
+							},
+							"response": []
+						},
+						{
+							"name": "ex_edt_item_10001",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"description\": \"The Birds (external)\",\n    \"price\": 99.99\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:8080/rest/external/items/10001",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"rest",
+										"external",
+										"items",
+										"10001"
+									]
+								},
+								"description": "Modify item directly via JDBC. Since Hibernate is unaware, this will not be reflected in L2 cache."
+							},
+							"response": []
+						}
+					],
+					"description": "Requests in this folder are targetting a special endpoint which simulates an external service by accessing the database directly via JDBC (thus going around hibernate)."
+				},
+				{
+					"name": "internal",
+					"item": [
+						{
+							"name": "get_item_10001",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/rest/items/10001",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"rest",
+										"items",
+										"10001"
+									]
+								},
+								"description": "Get Item info via Hibernate. This will put the item into L2 cache."
+							},
+							"response": []
+						},
+						{
+							"name": "edt_item_10001",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"description\": \"The Birds\",\n    \"price\": 99.99\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:8080/rest/items/10001",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"rest",
+										"items",
+										"10001"
+									]
+								},
+								"description": "Modify item info via Hibernate. This will be refected in L2 cache."
+							},
+							"response": []
+						},
+						{
+							"name": "get_cache_10001",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "localhost:8080/rest/cache/item/10001",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"rest",
+										"cache",
+										"item",
+										"10001"
+									]
+								},
+								"description": "Return True if the item is currently in Hibernate's L2 cache."
+							},
+							"response": []
+						},
+						{
+							"name": "evict_cache_10001",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "localhost:8080/rest/cache/item/10001",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"rest",
+										"cache",
+										"item",
+										"10001"
+									]
+								},
+								"description": "Evicts the item from Hibernate's L2 cache, if it is cached."
+							},
+							"response": []
+						}
+					],
+					"description": "Requests in this folder will access database via Hibernate, taking advantage of L2 cache."
+				}
+			],
+			"description": "[https://github.com/jcechace/czjug-debezium-l2-cache-invalidation](https://github.com/jcechace/czjug-debezium-l2-cache-invalidation)\n\nHTTP examples for talk titled \"**Introduction To CDC and Debezium**\".\n\nThe reqests are targetting a simple Quarkus application with **Hiberante L2 cache** enabled on Item resource. There are two categories of requests defined\n\n- **Internal**: database access done via Hibernate ORM and thus cache the Item information.\n    \n- **External:** database is access directly via JDBC making Hiberante unaware of these changes"
+		}
+	]
+}
